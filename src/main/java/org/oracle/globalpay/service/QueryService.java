@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @PropertySource("classpath:custom.properties")
-public class QueryService  {
+public class QueryService {
 
 	private List<Query> queries = new ArrayList<>();
 	@Value("${podbuddy.queries.file}")
@@ -27,15 +27,41 @@ public class QueryService  {
 	public void setQueries(List<Query> queries) {
 		this.queries = queries;
 	}
-	
+
 	public void addQuery(Query query) {
+		if (query.getQueryName() == null) {
+			return;
+			// throw new RuntimeException("Query name cannot be null");
+		}
+
+		// check if this query name already exists for user
+		List<Query> userQueries = this.getQueriesByAuthor(query.getAuthor());
+		for (Query userQuery : userQueries) {
+			if (userQuery.equals(query)) {
+				throw new RuntimeException("Query already exists by this name");
+			}
+		}
 		queries.add(query);
 		saveToFile();
+
 	}
 
 	public void removeQuery(Query query) {
 		queries.remove(query);
 		saveToFile();
+	}
+
+	public boolean removeQuery(String queryName, String userName) {
+		for (Query query : queries) {
+			if (queryName != null && queryName.equals(query.getQueryName())) {
+				if (query.getAuthor().equals(userName)) {
+					queries.remove(query);
+					saveToFile();
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public Query getQueryByName(String name) {
@@ -45,7 +71,7 @@ public class QueryService  {
 	public List<Query> getQueriesByAuthor(String author) {
 		List<Query> userQueries = new ArrayList<>();
 		for (Query query : queries) {
-			if (author!=null&&query.getAuthor()!=null&&query.getAuthor().equals(author)) {
+			if (author != null && query.getAuthor() != null && query.getAuthor().equals(author)) {
 				userQueries.add(query);
 			}
 		}
@@ -75,7 +101,7 @@ public class QueryService  {
 	public List<Query> getAllQueries() {
 		return queries;
 	}
-	
+
 	public List<String> getUsers() {
 		List<String> users = new ArrayList<>();
 		for (Query query : queries) {
@@ -106,15 +132,14 @@ public class QueryService  {
 		}
 		return maxDate;
 	}
-	
+
 	public void saveToFile() {
 		IOService.saveToFile(queries, queriesFile);
-	} 
+	}
 
 	@PostConstruct
 	public void loadFromFile() {
 		IOService.loadFromFile((new Query()), queriesFile, this);
 	}
 
-	
 }

@@ -52,4 +52,21 @@ public class Query implements Serializable{
 		return "Query [queryName=" + queryName + ", description=" + description + ", queryText="
 				+ queryText + ", author=" + author + ", lastUpdated=" + lastUpdated + "]";
 	}
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Query))
+			return false;
+		
+		Query passedObj = (Query)obj;
+		
+		if (passedObj.getQueryName() == null || passedObj.getAuthor() == null) 
+			return false;
+		
+		if (passedObj.getQueryName().equals(this.queryName) && passedObj.getAuthor().equals(this.author))
+				return true;
+		
+		return false;
+	}
+	
+	
 }

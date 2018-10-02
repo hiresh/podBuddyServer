@@ -8,6 +8,7 @@ import java.util.List;
 import org.oracle.globalpay.model.Query;
 import org.oracle.globalpay.service.QueryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,33 +20,33 @@ public class QueryController {
 
 	@Autowired
 	QueryService queryService;
-	
-	@PostMapping(value="/query")
+
+	@PostMapping(value = "/query")
 	public void addQuery(@RequestBody Query query) {
 		queryService.addQuery(query);
 	}
-	
-	@GetMapping(value="/queries")
+
+	@GetMapping(value = "/queries")
 	public List<Query> getAllQueries() {
 		return queryService.getAllQueries();
 	}
-	
-	@GetMapping(value="/query/{name}")
+
+	@GetMapping(value = "/query/{name}")
 	public Query getQuery(@PathVariable String name) {
 		return queryService.getQueryByName(name);
 	}
-	
-	@GetMapping(value="/user/{name}/queries")
+
+	@GetMapping(value = "/user/{name}/queries")
 	public List<Query> getAllUserQueries(@PathVariable("name") String name) {
 		return queryService.getQueriesByAuthor(name);
 	}
-	
-	@GetMapping(value="/user/{name}/otherQueries")
+
+	@GetMapping(value = "/user/{name}/otherQueries")
 	public List<Query> getQueriesByOtherAuthors(@PathVariable("name") String name) {
 		return queryService.getQueriesNotAuthoredBy(name);
 	}
-	
-	@GetMapping(value="/queries/{timeStamp}")
+
+	@GetMapping(value = "/queries/{timeStamp}")
 	public List<Query> getQueriesAfterTimestamp(@PathVariable("timeStamp") String timeStampString) {
 		Date timeStamp;
 		try {
@@ -56,10 +57,22 @@ public class QueryController {
 		}
 		return null;
 	}
-	
-	@GetMapping(value="/queries/load")
+
+	@GetMapping(value = "/queries/load")
 	public void loadFromFile() {
 		queryService.loadFromFile();
+	}
+
+	@DeleteMapping(value="/user/{userName}/query/{queryName}")
+	public boolean deleteQuery(@PathVariable("userName") String userName, @PathVariable("queryName") String queryName) {
+		System.out.println("Got delete request on "+queryName+" for user "+userName);
+		try {
+			return queryService.removeQuery(queryName, userName);			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }

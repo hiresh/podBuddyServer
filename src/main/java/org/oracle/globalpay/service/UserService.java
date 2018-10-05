@@ -1,5 +1,7 @@
 package org.oracle.globalpay.service;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import javax.annotation.PostConstruct;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
 	HashSet<User> users = new HashSet<>();
+	HashMap<String,Date> userLatestRequestMap=new HashMap<>();
 	@Value("${podbuddy.users.file}")
 	String usersFile;
 	@Autowired

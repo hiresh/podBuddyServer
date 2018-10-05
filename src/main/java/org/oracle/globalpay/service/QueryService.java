@@ -18,7 +18,19 @@ import org.springframework.stereotype.Service;
 @PropertySource("classpath:custom.properties")
 public class QueryService  {
 
+	@Autowired
+	UserService userService;
 	private List<Query> queries = new ArrayList<>();
+	private Date globalLatestRequestTime;//has been set in postConstruct
+	public Date getGlobalLatestRequestTime() {
+		return globalLatestRequestTime;
+	}
+
+	public void setGlobalLatestRequestTime(Date possibleLatestRequestTime) {
+		//if(possibleLatestRequestTime.after(globalLatestRequestTime))
+			this.globalLatestRequestTime = possibleLatestRequestTime;
+	}
+
 	@Value("${podbuddy.queries.file}")
 	String queriesFile;
 	@Autowired
@@ -30,11 +42,15 @@ public class QueryService  {
 	
 	public void addQuery(Query query) {
 		queries.add(query);
+		setGlobalLatestRequestTime(query.getLastUpdated());
+		//userService.userLatestRequestMap.put(query.getAuthor(), query.getLastUpdated());
 		saveToFile();
 	}
 
 	public void removeQuery(Query query) {
 		queries.remove(query);
+		setGlobalLatestRequestTime(query.getLastUpdated());
+		//userService.userLatestRequestMap.put(query.getAuthor(), query.getLastUpdated());
 		saveToFile();
 	}
 
@@ -89,6 +105,8 @@ public class QueryService  {
 	public void updateQuery(String name, Query query) {
 		queries.remove(getQueryByName(name));
 		queries.add(query);
+		setGlobalLatestRequestTime(query.getLastUpdated());
+		//userService.userLatestRequestMap.put(query.getAuthor(), query.getLastUpdated());
 		saveToFile();
 	}
 
@@ -113,6 +131,12 @@ public class QueryService  {
 
 	@PostConstruct
 	public void loadFromFile() {
+		try {
+			globalLatestRequestTime=new SimpleDateFormat("yyyy-MM-dd").parse("0001-01-01");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		IOService.loadFromFile((new Query()), queriesFile, this);
 	}
 

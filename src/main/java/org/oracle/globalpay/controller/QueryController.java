@@ -8,6 +8,7 @@ import java.util.List;
 import org.oracle.globalpay.model.Query;
 import org.oracle.globalpay.service.QueryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,5 +62,18 @@ public class QueryController {
 	public void loadFromFile() {
 		queryService.loadFromFile();
 	}
+	
+	@DeleteMapping(value="/user/{userName}/query/{queryName}")
+	public boolean deleteQuery(@PathVariable("userName") String userName, @PathVariable("queryName") String queryName) {
+		System.out.println("Got delete request on "+queryName+" for user "+userName);
+		try {
+			return queryService.removeQuery(queryName, userName);			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 
 }

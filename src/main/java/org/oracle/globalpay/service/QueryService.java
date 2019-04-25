@@ -53,6 +53,20 @@ public class QueryService  {
 		//userService.userLatestRequestMap.put(query.getAuthor(), query.getLastUpdated());
 		saveToFile();
 	}
+	
+	public boolean removeQuery(String queryName, String userName) {
+		for (Query query : queries) {
+			if (queryName != null && queryName.equals(query.getQueryName())) {
+				if (query.getAuthor().equals(userName)) {
+					queries.remove(query);
+					saveToFile();
+					setGlobalLatestRequestTime(new Date());
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	public Query getQueryByName(String name) {
 		return queries.stream().filter(q -> q.getQueryName().equals(name)).findFirst().get();
@@ -124,6 +138,8 @@ public class QueryService  {
 		}
 		return maxDate;
 	}
+	
+	
 	
 	public void saveToFile() {
 		IOService.saveToFile(queries, queriesFile);

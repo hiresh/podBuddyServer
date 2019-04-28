@@ -39,6 +39,8 @@ public class IOService {
 			@SuppressWarnings("resource")
 			ObjectInputStream ois = new ObjectInputStream(fis);
 
+			
+			
 			Object obj = ois.readObject();
 			System.out.println("************HIT*************");
 			if (type instanceof User) {

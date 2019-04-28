@@ -9,6 +9,8 @@ public class UserQuery {
 	User user;
 	List<Query> queries;
 	
+	
+	
 	public User getUser() {
 		return user;
 	}

@@ -43,6 +43,8 @@ public class Query implements Serializable{
 	public Date getLastUpdated() {
 		return lastUpdated;
 	}
+	
+	
 	public void setLastUpdated(Date lastUpdated) {
 		this.lastUpdated = lastUpdated;
 	}

@@ -9,6 +9,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.oracle.globalpay.model.Query;
+import org.oracle.globalpay.repository.QueryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -20,6 +21,10 @@ public class QueryService  {
 
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	QueryRepository queryMongoRepo;
+	
 	private List<Query> queries = new ArrayList<>();
 	private Date globalLatestRequestTime;//has been set in postConstruct
 	public Date getGlobalLatestRequestTime() {
@@ -45,6 +50,7 @@ public class QueryService  {
 		setGlobalLatestRequestTime(query.getLastUpdated());
 		//userService.userLatestRequestMap.put(query.getAuthor(), query.getLastUpdated());
 		saveToFile();
+		queryMongoRepo.save(query);
 	}
 
 	public void removeQuery(Query query) {
@@ -104,6 +110,7 @@ public class QueryService  {
 
 	public List<Query> getAllQueries() {
 		return queries;
+		//TODO: fetch from database
 	}
 	
 	public List<String> getUsers() {
@@ -143,6 +150,7 @@ public class QueryService  {
 	
 	public void saveToFile() {
 		IOService.saveToFile(queries, queriesFile);
+		
 	} 
 
 	@PostConstruct
@@ -153,8 +161,20 @@ public class QueryService  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		IOService.loadFromFile((new Query()), queriesFile, this);
+		
+		
+		/*
+		 * Commenting the initial load from files, fetching from db instead
+		 */
+		//IOService.loadFromFile((new Query()), queriesFile, this);
+		
+		
+		setQueries(queryMongoRepo.findAll());
 	}
 
+	@PostConstruct
+	public void loadQueriesInMemory(){
+		
+	}
 	
 }

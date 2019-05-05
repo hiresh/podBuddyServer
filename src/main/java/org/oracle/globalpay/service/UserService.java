@@ -34,7 +34,7 @@ public class UserService {
 	public boolean addUser(User user) {
 		if(users.add(user)){
 			userMongoRepo.save(user);
-			saveToFile();
+			//saveToFile();
 			return true;
 		}
 		return false;

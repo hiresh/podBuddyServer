@@ -15,7 +15,13 @@ public class Query implements Serializable{
 	private String queryText;
 	private String author;
 	private Date lastUpdated;
-	
+	private String _id;
+	public String get_id() {
+		return _id;
+	}
+	public void set_id(String _id) {
+		this._id = _id;
+	}
 	public String getQueryName() {
 		return queryName;
 	}
@@ -47,6 +53,15 @@ public class Query implements Serializable{
 	
 	public void setLastUpdated(Date lastUpdated) {
 		this.lastUpdated = lastUpdated;
+	}
+	
+	@Override
+	public boolean equals(Object q){
+		Query query=(Query)q;
+		if(query.queryName.equals(this.queryName) && query.author.equals(this.author))
+		return true;
+		
+		return false;
 	}
 	
 	@Override

@@ -49,7 +49,7 @@ public class QueryService  {
 		queries.add(query);
 		setGlobalLatestRequestTime(query.getLastUpdated());
 		//userService.userLatestRequestMap.put(query.getAuthor(), query.getLastUpdated());
-		saveToFile();
+		//saveToFile();
 		queryMongoRepo.save(query);
 	}
 
@@ -65,12 +65,15 @@ public class QueryService  {
 			if (queryName != null && queryName.equals(query.getQueryName())) {
 				if (query.getAuthor().equals(userName)) {
 					queries.remove(query);
-					saveToFile();
+					//TODO: remove for loop
+					queryMongoRepo.delete(queryMongoRepo.findByQueryName(query.getQueryName()));
+					//saveToFile();
 					setGlobalLatestRequestTime(new Date());
 					return true;
 				}
 			}
 		}
+		
 		return false;
 	}
 
@@ -85,6 +88,9 @@ public class QueryService  {
 				userQueries.add(query);
 			}
 		}
+		
+		
+		
 		return userQueries;
 	}
 

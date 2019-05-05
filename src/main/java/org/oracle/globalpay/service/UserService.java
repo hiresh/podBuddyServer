@@ -7,6 +7,7 @@ import java.util.HashSet;
 import javax.annotation.PostConstruct;
 
 import org.oracle.globalpay.model.User;
+import org.oracle.globalpay.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class UserService {
 	@Autowired
 	UtilityService utilityService;
 	
+	@Autowired
+	UserRepository userMongoRepo;
+	
 	public void setUsers(HashSet<User> users) {
 		this.users = users;
 		
@@ -29,6 +33,7 @@ public class UserService {
 	
 	public boolean addUser(User user) {
 		if(users.add(user)){
+			userMongoRepo.save(user);
 			saveToFile();
 			return true;
 		}
@@ -52,8 +57,12 @@ public class UserService {
 	}
 	
 	public HashSet<User> getAllUsers() {
-		return users;
+		
+		return new HashSet<User>(userMongoRepo.findAll());
+		
+		//return users;
 	}
+	
 	
 	public void saveToFile() {
 		IOService.saveToFile(users, usersFile);
@@ -61,7 +70,8 @@ public class UserService {
 
 	@PostConstruct
 	public void loadFromFile() {
-		IOService.loadFromFile((new User()), usersFile, this);
+		//IOService.loadFromFile((new User()), usersFile, this);
+		setUsers(getAllUsers());
 	}
 
 	

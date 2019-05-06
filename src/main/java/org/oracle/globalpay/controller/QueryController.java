@@ -63,11 +63,11 @@ public class QueryController {
 		queryService.loadFromFile();
 	}
 	
-	@DeleteMapping(value="/user/{userName}/query/{queryName}")
-	public boolean deleteQuery(@PathVariable("userName") String userName, @PathVariable("queryName") String queryName) {
-		System.out.println("Got delete request on "+queryName+" for user "+userName);
+	@DeleteMapping(value="/user/{userName}/query/{queryId}")
+	public boolean deleteQuery(@PathVariable("userName") String userName, @PathVariable("queryId") String queryId) {
+		System.out.println("Got delete request on "+queryId+" for user "+userName);
 		try {
-			return queryService.removeQuery(queryName, userName);			
+			return queryService.removeQuery(queryId, userName);			
 		}
 		catch (Exception e) {
 			e.printStackTrace();

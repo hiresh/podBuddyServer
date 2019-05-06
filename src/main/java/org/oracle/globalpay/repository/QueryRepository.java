@@ -11,5 +11,6 @@ public interface QueryRepository extends MongoRepository<Query, String>{
 
 	public List<Query> findByAuthor(String a);
 	public Query findByQueryName(String name);
+	public Query findBy_id(String id);
 	
 }

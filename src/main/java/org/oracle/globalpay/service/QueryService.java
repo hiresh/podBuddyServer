@@ -60,19 +60,23 @@ public class QueryService  {
 		saveToFile();
 	}
 	
-	public boolean removeQuery(String queryName, String userName) {
+	public boolean removeQuery(String queryId, String userName) {
 		for (Query query : queries) {
-			if (queryName != null && queryName.equals(query.getQueryName())) {
-				if (query.getAuthor().equals(userName)) {
+			if (query.get_id().equals(queryId)) {
+				
 					queries.remove(query);
-					//TODO: remove for loop
-					queryMongoRepo.delete(queryMongoRepo.findByQueryName(query.getQueryName()));
-					//saveToFile();
 					setGlobalLatestRequestTime(new Date());
+					//TODO: remove for loop
+					queryMongoRepo.delete(queryMongoRepo.findBy_id(query.get_id()));
+					//saveToFile();
+					
 					return true;
-				}
+				
 			}
 		}
+
+		
+		
 		
 		return false;
 	}

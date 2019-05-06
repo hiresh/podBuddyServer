@@ -58,10 +58,21 @@ public class Query implements Serializable{
 	@Override
 	public boolean equals(Object q){
 		Query query=(Query)q;
-		if(query.queryName.equals(this.queryName) && query.author.equals(this.author))
-		return true;
+		if(query._id.equals(this._id))
+			return true;
 		
 		return false;
+	}
+	
+	@Override
+	public int hashCode(){
+		
+		int hash = 7;
+		for (int i = 0; i < this._id.length(); i++) {
+		    hash = hash*31 + this._id.charAt(i);
+		}
+		
+		return hash;
 	}
 	
 	@Override

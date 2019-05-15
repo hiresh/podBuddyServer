@@ -26,7 +26,7 @@ public class UtilityService {
 	
 	public List<UserQuery> getUserQueries(String userName) {
 		if(userService.userLatestRequestMap.isEmpty()){
-			userService.getAllUsers().forEach(u->{
+			userService.getUsersByTeam(userService.getUser(userName).getUserTeam()).forEach(u->{
 				if(u!=null && u.getRegisteredName()!=null){
 
 					ArrayList<Query> queriesByAuthor=(ArrayList<Query>) queryService.getQueriesByAuthor(u.getRegisteredName());

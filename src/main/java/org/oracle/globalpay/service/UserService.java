@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 import javax.annotation.PostConstruct;
 
+import org.oracle.globalpay.model.Team;
 import org.oracle.globalpay.model.User;
 import org.oracle.globalpay.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,9 @@ public class UserService {
 		//return users;
 	}
 	
+	public HashSet<User> getUsersByTeam(Team t){
+		return new HashSet<User>(userMongoRepo.findByUserTeam(t));
+	}
 	
 	public void saveToFile() {
 		IOService.saveToFile(users, usersFile);

@@ -12,7 +12,14 @@ public class User implements Serializable {
 	
 	private String registeredName;
 	
+	private Team userTeam;
 	
+	public Team getUserTeam() {
+		return userTeam;
+	}
+	public void setUserTeam(Team userTeam) {
+		this.userTeam = userTeam;
+	}
 	private Date lastRequest;
 	
 	public String getRegisteredName() {

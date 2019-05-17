@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.oracle.globalpay.model.User;
 import org.oracle.globalpay.model.Query;
+import org.oracle.globalpay.model.User;
 import org.oracle.globalpay.model.UserQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class UtilityService {
 	
 	public List<UserQuery> getUserQueries(String userName) {
 		if(userService.userLatestRequestMap.isEmpty()){
-			userService.getUsersByTeam(userService.getUser(userName).getUserTeam()).forEach(u->{
+			userService.getUsersByTeamId((userService.getUser(userName).getTeamId())).forEach(u->{
 				if(u!=null && u.getRegisteredName()!=null){
 
 					ArrayList<Query> queriesByAuthor=(ArrayList<Query>) queryService.getQueriesByAuthor(u.getRegisteredName());
@@ -57,12 +57,14 @@ public class UtilityService {
 			
 			userService.userLatestRequestMap.put(userName, queryService.getGlobalLatestRequestTime());
 		List<UserQuery> userQueries = new ArrayList<>();
-		(queryService.getUsers()).forEach(u -> {
+		(userService.getUsersByTeamId((userService.getUser(userName).getTeamId()))).forEach(u -> {
 			UserQuery userQuery = new UserQuery();
-			User user=userService.getUser(u);
-			if(user!=null&&user.getRegisteredName()!=null&&!"".equals(user.getRegisteredName())){
-			userQuery.setUser(user);
-			userQuery.setQueries(queryService.getQueriesByAuthor(u));
+			//User user=userService.getUser(u);
+			if(u!=null&&u.getRegisteredName()!=null&&!"".equals(u.getRegisteredName())){
+			userQuery.setUser(u);
+			ArrayList<Query> queriesOfUser=(ArrayList<Query>)queryService.getQueriesByAuthor(u.getRegisteredName());
+			userQuery.setQueries(queriesOfUser);
+			if(!queriesOfUser.isEmpty())
 			userQueries.add(userQuery);
 			}
 		});

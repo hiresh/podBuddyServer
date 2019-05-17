@@ -68,6 +68,10 @@ public class UserService {
 		return new HashSet<User>(userMongoRepo.findByUserTeam(t));
 	}
 	
+	public HashSet<User> getUsersByTeamId(String tid){
+		return new HashSet<User>(userMongoRepo.findByTeamId(tid));
+	}
+	
 	public void saveToFile() {
 		IOService.saveToFile(users, usersFile);
 	} 

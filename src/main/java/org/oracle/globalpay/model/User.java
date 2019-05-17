@@ -16,6 +16,8 @@ public class User implements Serializable {
 	
 	private String teamId;
 	
+	private String hashedPassword;
+	
 	public String getTeamId() {
 		return teamId;
 	}
@@ -71,7 +73,17 @@ public class User implements Serializable {
 				return false;
 		} else if (!registeredName.equals(other.registeredName))
 			return false;
+		else if(!hashedPassword.equals(other.hashedPassword))
+			return false;
 		return true;
+	}
+	
+	
+	public String getHashedPassword() {
+		return hashedPassword;
+	}
+	public void setHashedPassword(String hashedPassword) {
+		this.hashedPassword = hashedPassword;
 	}
 	
 }

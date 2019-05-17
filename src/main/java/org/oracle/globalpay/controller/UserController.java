@@ -37,4 +37,9 @@ public class UserController {
 	public void deleteUser(@PathVariable String name) {
 		userService.removeUser(userService.getUser(name));
 	}	
+	
+	@PostMapping(value="/login")
+	public boolean getUser(@RequestBody String name, String hashedPassword) {
+		return userService.verifyPassword(name, hashedPassword);
+	}
 }

@@ -73,8 +73,6 @@ public class User implements Serializable {
 				return false;
 		} else if (!registeredName.equals(other.registeredName))
 			return false;
-		else if(!hashedPassword.equals(other.hashedPassword))
-			return false;
 		return true;
 	}
 	

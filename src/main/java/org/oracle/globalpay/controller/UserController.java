@@ -1,6 +1,7 @@
 package org.oracle.globalpay.controller;
 
 import java.util.HashSet;
+import java.util.Map;
 
 import org.oracle.globalpay.model.User;
 import org.oracle.globalpay.service.UserService;
@@ -38,8 +39,8 @@ public class UserController {
 		userService.removeUser(userService.getUser(name));
 	}	
 	
-	@PostMapping(value="/login")
-	public boolean getUser(@RequestBody String name, String hashedPassword) {
-		return userService.verifyPassword(name, hashedPassword);
+	@PostMapping(value="/login", consumes="application/json")
+	public boolean getUser(@RequestBody  Map<String,String> body) {
+		return userService.verifyPassword(body.get("name"), body.get("hashedPassword"));
 	}
 }

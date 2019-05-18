@@ -85,6 +85,9 @@ public class UserService {
 	public boolean verifyPassword(String name, String hashedPassword) {
 		// TODO Auto-generated method stub
 		User usr = getUser(name);
+		if (usr == null) {
+			return false;
+		}
 		return usr.getHashedPassword().equals(hashedPassword);
 	}
 

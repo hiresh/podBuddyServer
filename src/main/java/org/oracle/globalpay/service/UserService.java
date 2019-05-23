@@ -1,5 +1,7 @@
 package org.oracle.globalpay.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -88,6 +90,8 @@ public class UserService {
 		if (usr == null) {
 			return false;
 		}
+		if(userLatestRequestMap.containsKey(name))
+				userLatestRequestMap.remove(name);
 		return usr.getHashedPassword().equals(hashedPassword);
 	}
 
